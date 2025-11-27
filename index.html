@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mondofficina</title>
+    <link rel="stylesheet" href="css/stile.css">
+    <script defer src="java/index.js"></script>
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+</head>
+
+<body>
+<header>
+    <nav>
+        <div class="logo">
+            🔧 Mondofficina Automotive Solutions
+        </div>
+        <button class="menu-toggle" aria-label="Apri/chiudi menu di navigazione">☰</button>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#categorie">Categorie</a></li>
+            <li><a href="#prodotti">Prodotti</a></li>
+            <li><a href="#contatti">Contatti</a></li>
+            <li><a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Officine Autorizzate</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="home" class="hero">
+    <div class="hero-content">
+        <h1>Ricambi Professionali per la Tua Officina</h1>
+        <p>Forniamo ricambi originali, strumenti diagnostici e componenti meccanici di alta qualità per meccanici professionisti.</p>
+        <div class="cta-buttons">
+            <button class="btn btn-primary" onclick="scrollToSection('prodotti')">Esplora Catalogo Offerte</button>
+            <button class="btn btn-secondary" onclick="scrollToSection('contatti')">Contattaci</button>
+        </div>
+    </div>
+    <div class="hero-image">
+        <div>
+            <img src="img/mondofficina.png" alt="Mondofficina logo" style="max-width: 100%; height: auto;">
+        </div>
+    </div>
+</section>
+
+<section id="categorie" class="categories">
+    <h2>Le Nostre Categorie</h2>
+    <div class="category-grid">
+        <div class="category-card" onclick="filterProducts('Automotive')">
+            <div class="category-icon">🚗</div>
+            <h3>Automotive</h3>
+            <p>Componenti e ricambi per veicoli</p>
+        </div>
+        <div class="category-card" onclick="filterProducts('Aria Condizionata')">
+            <div class="category-icon">❄️</div>
+            <h3>Aria Condizionata</h3>
+            <p>Sistemi di climatizzazione e refrigerazione</p>
+        </div>
+        <div class="category-card" onclick="filterProducts('Batterie')">
+            <div class="category-icon">🔋</div>
+            <h3>Batterie</h3>
+            <p>Batterie e sistemi di alimentazione</p>
+        </div>
+        <div class="category-card" onclick="filterProducts('Diagnostica')">
+            <div class="category-icon">💻</div>
+            <h3>Diagnostica</h3>
+            <p>Scanner OBD2, tester e strumenti professionali</p>
+        </div>
+        <div class="category-card" onclick="filterProducts('elettronica')">
+            <div class="category-icon">⚡</div>
+            <h3>Elettronica</h3>
+            <p>Sensori, centraline e componenti elettrici</p>
+        </div>
+        <div class="category-card" onclick="filterProducts('Filtri')">
+            <div class="category-icon">🔧</div>
+            <h3>Filtri</h3>
+            <p>Filtri olio, aria, carburante e abitacolo</p>
+        </div>
+        <div class="category-card" onclick="filterProducts('Freni')">
+            <div class="category-icon">🛑</div>
+            <h3>Freni</h3>
+            <p>Pastiglie, dischi, pinze e componenti idraulici</p>
+        </div>
+        <div class="category-card" onclick="filterProducts('Manutenzione Generale')">
+            <div class="category-icon">⚙️</div>
+            <h3>Manutenzione Generale</h3>
+            <p>Prodotti per manutenzione ordinaria e straordinaria</p>
+        </div>
+    </div>
+</section>
+
+<section id="prodotti" class="products">
+    <h2>Prodotti in Evidenza</h2>
+    <div class="filter-bar">
+        <button class="filter-btn active" data-category="tutti" onclick="filterProducts('tutti')">Tutti</button>
+        <button class="filter-btn" data-category="Automotive" onclick="filterProducts('Automotive')">Automotive</button>
+        <button class="filter-btn" data-category="Aria Condizionata" onclick="filterProducts('Aria Condizionata')">Aria Condizionata</button>
+        <button class="filter-btn" data-category="Batterie" onclick="filterProducts('Batterie')">Batterie</button>
+        <button class="filter-btn" data-category="Diagnostica" onclick="filterProducts('Diagnostica')">Diagnostica</button>
+        <button class="filter-btn" data-category="Elettronica" onclick="filterProducts('Elettronica')">Elettronica</button>
+        <button class="filter-btn" data-category="Filtri" onclick="filterProducts('Filtri')">Filtri</button>
+        <button class="filter-btn" data-category="Freni" onclick="filterProducts('Freni')">Freni</button>
+        <button class="filter-btn" data-category="Manutenzione Generale" onclick="filterProducts('Manutenzione Generale')">Manutenzione Generale</button>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+</section>
+
+<section id="contatti" class="contact-section">
+    <div class="contact-container">
+        <div class="contact-info">
+            <h2>Contattaci</h2>
+            <p style="margin-bottom: 2rem;">Siamo qui per supportare la tua officina con <br>
+                prodotti di qualità e consulenza professionale.</p>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <span style="font-size: 1.5rem;">📞</span>
+                    <span>+39 02 1234 5678</span>
+                </div>
+                <div class="contact-item">
+                    <span style="font-size: 1.5rem;">✉️</span>
+                    <span>ordini@mondoffcina.com</span>
+                </div>
+                <div class="contact-item">
+                    <span style="font-size: 1.5rem;">📍</span>
+                    <span>Via Domenico Atripaldi 45, Napoli</span>
+                </div>
+                <div class="contact-item">
+                    <span style="font-size: 1.5rem;">⏰</span>
+                    <span>Lun-Ven: 8:30-13:30 / 14:30-19:00 | Sab: 8:30-13:30</span>
+                </div>
+            </div>
+        </div>
+        <div class="contact-form">
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="nome-cognome">Nome e Cognome</label>
+                    <input id="nome-cognome" name="nome-cognome" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Telefono</label>
+                    <input id="telefono" name="telefono" type="tel">
+                </div>
+                <div class="form-group">
+                    <label for="messaggio">Messaggio</label>
+                    <textarea id="messaggio" name="messaggio" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Invia Richiesta</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Mondofficina - Ricambi e Diagnostica per Professionisti</p>
+    <p>P.IVA 08639001216 | Tutti i diritti riservati</p>
+</footer>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle"></h2>
+            <button class="close-btn" type="button" aria-label="Chiudi finestra" onclick="closeModal()">&times;</button>
+        </div>
+        <div id="modalBody"></div>
+    </div>
+</div>
+</body>
+</html>
+
+
+
