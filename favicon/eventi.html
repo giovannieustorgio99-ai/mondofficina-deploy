@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventi - Mondofficina</title>
+    <link rel="stylesheet" href="css/stile.css">
+    <link rel="stylesheet" href="css/stile2.css">
+    <script defer src="java/eventi.js"></script>
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+</head>
+
+<body>
+<header>
+    <nav>
+        <div class="logo">
+            🔧 Mondofficina Automotive Solutions
+        </div>
+        <button class="menu-toggle" aria-label="Apri/chiudi menu di navigazione">☰</button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#categorie">Categorie</a></li>
+            <li><a href="index.html#prodotti">Prodotti</a></li>
+            <li><a href="index.html#contatti">Contatti</a></li>
+            <li><a href="eventi.html" class="active">Prenota Eventi</a></li>
+            <li><a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Officine Autorizzate</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="eventi-hero">
+    <div class="eventi-hero-container">
+        <div class="eventi-hero-logo">
+            <div style="background: white; padding: 1rem 2rem; border-radius: 15px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.3);">
+                <img src="img/mondofficina.png" alt="Mondofficina logo" style="max-width: 250px; height: auto; display: block;">
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1>📅 Prenota i Nostri Eventi</h1>
+            <p>Scopri workshop, fiere e corsi di formazione dedicati ai professionisti del settore automotive</p>
+        </div>
+    </div>
+</section>
+
+<section class="eventi-section">
+    <div class="eventi-container">
+        <h2>Eventi in Programma</h2>
+        <div class="eventi-grid" id="eventiGrid">
+            <!-- Gli eventi verranno caricati qui dinamicamente -->
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Mondofficina - Ricambi e Diagnostica per Professionisti</p>
+    <p>P.IVA 08639001216 | Tutti i diritti riservati</p>
+</footer>
+
+<div id="eventoModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="eventoModalTitle">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="eventoModalTitle"></h2>
+            <button class="close-btn" type="button" aria-label="Chiudi finestra" onclick="closeEventoModal()">&times;</button>
+        </div>
+        <div id="eventoModalBody"></div>
+    </div>
+</div>
+
+</body>
+</html>
