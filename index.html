@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mondofficina</title>
+    <!-- CSS -->
     <link rel="stylesheet" href="css/stile.css">
+    <!-- JS -->
     <script defer src="java/index.js"></script>
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
     <link rel="shortcut icon" href="favicon/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
-    <link rel="manifest" href="favicon/site.webmanifest" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
 </head>
 
 <body>
@@ -25,7 +28,7 @@
             <li><a href="#categorie">Categorie</a></li>
             <li><a href="#prodotti">Prodotti</a></li>
             <li><a href="#contatti">Contatti</a></li>
-            <li><a href="eventi.html">Eventi</a> </li>
+            <li><a href="eventi.html">Eventi</a></li>
             <li><a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Officine Autorizzate</a></li>
         </ul>
     </nav>
@@ -42,7 +45,7 @@
     </div>
     <div class="hero-image">
         <div>
-            <img src="img/mondofficina.png" alt="Mondofficina logo" style="max-width: 100%; height: auto;">
+            <img src="img/mondofficina.png" alt="Logo Mondofficina" style="max-width: 100%; height: auto;">
         </div>
     </div>
 </section>
@@ -60,8 +63,8 @@
             <h3>Aria Condizionata</h3>
             <p>Sistemi di climatizzazione e refrigerazione</p>
         </div>
-        <div class="category-card" onclick="filterProducts('chimici')">
-            <div class="category-icon">🧪</div>
+        <div class="category-card" onclick="filterProducts('Prodotti Chimici')">
+            <div class="category-icon">❄️</div>
             <h3>Prodotti Chimici</h3>
             <p>Detergenti, solventi, additivi e prodotti professionali per officine</p>
         </div>
@@ -70,7 +73,7 @@
             <h3>Diagnostica</h3>
             <p>Scanner OBD2, tester e strumenti professionali</p>
         </div>
-        <div class="category-card" onclick="filterProducts('elettronica')">
+        <div class="category-card" onclick="filterProducts('Elettronica')">
             <div class="category-icon">⚡</div>
             <h3>Elettronica</h3>
             <p>Sensori, centraline e componenti elettrici</p>
@@ -99,7 +102,7 @@
         <button class="filter-btn active" data-category="tutti" onclick="filterProducts('tutti')">Tutti</button>
         <button class="filter-btn" data-category="Automotive" onclick="filterProducts('Automotive')">Automotive</button>
         <button class="filter-btn" data-category="Aria Condizionata" onclick="filterProducts('Aria Condizionata')">Aria Condizionata</button>
-        <button class="filter-btn" data-category="Prodoti Chimici" onclick="filterProducts('Prodotti Chimici')">Prodotti Chimici</button>
+        <button class="filter-btn" data-category="Prodotti Chimici" onclick="filterProducts('Prodotti Chimici')">Prodotti Chimici</button>
         <button class="filter-btn" data-category="Diagnostica" onclick="filterProducts('Diagnostica')">Diagnostica</button>
         <button class="filter-btn" data-category="Elettronica" onclick="filterProducts('Elettronica')">Elettronica</button>
         <button class="filter-btn" data-category="Filtri" onclick="filterProducts('Filtri')">Filtri</button>
@@ -113,12 +116,14 @@
     <div class="contact-container">
         <div class="contact-info">
             <h2>Contattaci</h2>
-            <p style="margin-bottom: 2rem;">Siamo qui per supportare la tua officina con <br>
-                prodotti di qualità e consulenza professionale.</p>
+            <p style="margin-bottom: 2rem;">
+                Siamo qui per supportare la tua officina con <br>
+                prodotti di qualità e consulenza professionale.
+            </p>
             <div class="contact-details">
                 <div class="contact-item">
                     <span style="font-size: 1.5rem;">📞</span>
-                    <span> Telefono Fisso = 081 18639696    <br>   Mobile = +39 3270949208</span>
+                    <span> Telefono Fisso = 081 18639696<br>Mobile = +39 3270949208</span>
                 </div>
                 <div class="contact-item">
                     <span style="font-size: 1.5rem;">✉️</span>
@@ -174,6 +179,7 @@
 </div>
 </body>
 </html>
+
 
 
 

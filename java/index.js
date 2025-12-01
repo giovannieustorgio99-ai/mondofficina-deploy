@@ -23,8 +23,8 @@ async function loadProducts() {
                 desc: row.desc,
                 price: row.price,
                 category: row.category,
-                img: images[0], // Prima immagine per l'anteprima
-                images: images, // Array di tutte le immagini
+                img: images[0],
+                images: images,
                 garanzia: row.garanzia,
                 spedizione: row.spedizione,
                 supporto: row.supporto,
@@ -92,11 +92,37 @@ function renderProducts(filter = "tutti") {
 }
 
 function filterProducts(category) {
+    console.log("🔍 Categoria richiesta:", category);
+    console.log("🔍 Tipo:", typeof category);
+    console.log("🔍 Lunghezza:", category.length);
+    console.log("🔍 Caratteri:", category.split('').map(c => c.charCodeAt(0)));
+
     currentFilter = category;
     renderProducts(category);
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.category === category);
+
+    // Aggiorna bottoni
+    let buttons = document.querySelectorAll(".filter-btn");
+    console.log("📊 Totale bottoni:", buttons.length);
+
+    buttons.forEach(function(btn, index) {
+        let btnCategory = btn.dataset.category || '';
+        let match = btnCategory.toLowerCase() === category.toLowerCase();
+
+        console.log(`🔘 Bottone ${index}:`, {
+            dataCategory: btnCategory,
+            match: match,
+            btnLower: btnCategory.toLowerCase(),
+            catLower: category.toLowerCase()
+        });
+
+        if (match) {
+            btn.classList.add("active");
+            console.log("✅ Bottone attivato:", btnCategory);
+        } else {
+            btn.classList.remove("active");
+        }
     });
+
     scrollToSection("prodotti");
 }
 
