@@ -1,5 +1,5 @@
 let dataBaseDb = "https://sheetdb.io/api/v1/e427kzhcnp5x3";
-let whatsAppNumber = "393401234567";
+let whatsAppNumber = "3270949208";
 let products = [];
 let currentFilter = "tutti";
 
@@ -122,7 +122,7 @@ function showProductDetails(productId) {
                 img.includes('.gif');
 
             let imgContent = isImage
-                ? `<img src="${img}" alt="${product.name}" class="slider-image">`
+                ? `<img src="${img}" alt="${product.name}" class="slider-image" onclick="zoomImage(this)" title="Clicca per ingrandire">`
                 : `<div style="font-size: 5rem; display: flex; align-items: center; justify-content: center; height: 300px;">${img}</div>`;
 
             return `<div class="slider-slide" data-slide="${index}" style="display: ${index === 0 ? 'block' : 'none'};">${imgContent}</div>`;
@@ -205,6 +205,145 @@ function updateSliderDisplay(productId, activeIndex) {
     });
 }
 
+// Variabili globali per lo zoom
+let currentZoomProductId = null;
+let currentZoomImageIndex = 0;
+
+// Funzione per lo zoom delle immagini
+function zoomImage(imgElement) {
+    console.log(imgElement)
+    // Trova il prodotto corrente dall'immagine
+    let allSlides = document.querySelectorAll('.slider-slide');
+    let currentSlideIndex = 0;
+
+    allSlides.forEach((slide, index) => {
+        if (slide.style.display !== 'none') {
+            currentSlideIndex = index;
+        }
+    });
+
+    // Trova il productId dallo stato dello slider
+    for (let productId in window.sliderStates) {
+        if (window.sliderStates[productId] === currentSlideIndex) {
+            currentZoomProductId = parseInt(productId);
+            currentZoomImageIndex = currentSlideIndex;
+            break;
+        }
+    }
+
+    // Se non troviamo il prodotto dallo stato, usiamo il primo prodotto visualizzato nel modal
+    if (!currentZoomProductId) {
+        let modalTitle = document.getElementById('modalTitle').textContent;
+        let product = products.find(p => p.name === modalTitle);
+        if (product) {
+            currentZoomProductId = product.id;
+            currentZoomImageIndex = 0;
+        }
+    }
+
+    // Crea l'overlay per lo zoom se non esiste già
+    let zoomOverlay = document.getElementById('imageZoomOverlay');
+
+    if (!zoomOverlay) {
+        zoomOverlay = document.createElement('div');
+        zoomOverlay.id = 'imageZoomOverlay';
+        zoomOverlay.className = 'image-zoom-overlay';
+        zoomOverlay.innerHTML = `
+            <button class="zoom-close-btn" onclick="closeZoom()" title="Chiudi (Esc)">&times;</button>
+            <button class="zoom-arrow zoom-arrow-left" onclick="changeZoomImage(-1)" title="Immagine precedente">‹</button>
+            <button class="zoom-arrow zoom-arrow-right" onclick="changeZoomImage(1)" title="Immagine successiva">›</button>
+            <div class="zoom-counter" id="zoomCounter"></div>
+            <img id="zoomedImage" src="" alt="Immagine ingrandita">
+        `;
+        document.body.appendChild(zoomOverlay);
+
+        // Chiudi cliccando sull'overlay
+        zoomOverlay.addEventListener('click', function(e) {
+            if (e.target === zoomOverlay) {
+                closeZoom();
+            }
+        });
+    }
+
+    // Aggiorna l'immagine e mostra l'overlay
+    updateZoomImage();
+    zoomOverlay.classList.add('active');
+
+    // Previeni lo scroll del body
+    document.body.style.overflow = 'hidden';
+
+    // Aggiorna la visibilità delle frecce
+    updateZoomArrows();
+}
+
+function updateZoomImage() {
+    let product = products.find(p => p.id === currentZoomProductId);
+    if (!product) return;
+
+    let zoomedImg = document.getElementById('zoomedImage');
+    let zoomCounter = document.getElementById('zoomCounter');
+
+    zoomedImg.src = product.images[currentZoomImageIndex];
+    zoomedImg.alt = product.name;
+
+    // Aggiorna il contatore
+    if (product.images.length > 1) {
+        zoomCounter.textContent = `${currentZoomImageIndex + 1} / ${product.images.length}`;
+        zoomCounter.style.display = 'block';
+    } else {
+        zoomCounter.style.display = 'none';
+    }
+}
+
+function updateZoomArrows() {
+    let product = products.find(p => p.id === currentZoomProductId);
+    if (!product) return;
+
+    let leftArrow = document.querySelector('.zoom-arrow-left');
+    let rightArrow = document.querySelector('.zoom-arrow-right');
+
+    // Mostra le frecce solo se ci sono più immagini
+    if (product.images.length > 1) {
+        leftArrow.style.display = 'flex';
+        rightArrow.style.display = 'flex';
+    } else {
+        leftArrow.style.display = 'none';
+        rightArrow.style.display = 'none';
+    }
+}
+
+function changeZoomImage(direction) {
+    let product = products.find(p => p.id === currentZoomProductId);
+    if (!product) return;
+
+    currentZoomImageIndex += direction;
+
+    // Loop circolare
+    if (currentZoomImageIndex < 0) {
+        currentZoomImageIndex = product.images.length - 1;
+    }
+    if (currentZoomImageIndex >= product.images.length) {
+        currentZoomImageIndex = 0;
+    }
+
+    // Aggiorna anche lo slider nel modal
+    window.sliderStates[currentZoomProductId] = currentZoomImageIndex;
+    updateSliderDisplay(currentZoomProductId, currentZoomImageIndex);
+
+    // Aggiorna l'immagine zoomata
+    updateZoomImage();
+}
+
+function closeZoom() {
+    let zoomOverlay = document.getElementById('imageZoomOverlay');
+    if (zoomOverlay) {
+        zoomOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    currentZoomProductId = null;
+    currentZoomImageIndex = 0;
+}
+
 function closeModal() {
     let modal = document.getElementById("modal");
     if (modal) {
@@ -268,9 +407,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Gestione tastiera per modal e zoom
     document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
+            closeZoom();
             closeModal();
+        }
+
+        // Navigazione con frecce quando lo zoom è attivo
+        let zoomOverlay = document.getElementById('imageZoomOverlay');
+        if (zoomOverlay && zoomOverlay.classList.contains('active')) {
+            if (e.key === "ArrowLeft") {
+                changeZoomImage(-1);
+            } else if (e.key === "ArrowRight") {
+                changeZoomImage(1);
+            }
         }
     });
 
