@@ -1,8 +1,10 @@
+/* global Calendly*/
+/* exported Calendly */
 // CONFIGURAZIONE: Inserisci qui il tuo endpoint SheetDB per gli eventi
 let eventiDatabaseUrl = "https://sheetdb.io/api/v1/rjc3f8o3vryao";
 
 // CONFIGURAZIONE: Inserisci qui l'URL della pagina di prenotazione
-let bookingPageUrl = "https://tuosito.com/prenotazioni";
+let calendlyUrl = "https://calendly.com/mondofficinainfo/furgone-milwakee";
 let eventi = [];
 let currentFilter = "tutti";
 
@@ -96,7 +98,7 @@ function renderEventi() {
             '<div class="evento-info">' +
             '<h3>' + evento.name + '</h3>' +
             '<p>' + evento.desc + '</p>' +
-            '<button class="btn btn-primary" style="width: 100%; margin-top: auto;">📅 Prendi un Appuntamento</button>' +
+            '<button class="btn btn-primary" style="width: 100%; margin-top: auto;">📅 Prendi un Apuntamento</button>' +
             '</div>' +
             '</div>';
     }).join("");
@@ -137,7 +139,7 @@ function showEventoDetails(eventoId) {
     let sliderHTML = '';
     if (evento.images && evento.images.length > 0) {
         sliderHTML = '<div class="product-slider"><div class="slider-container">';
-        evento.images.forEach(function(img, index) {
+        evento.images.forEach(function (img, index) {
             let isImage = isImageUrl(img);
             let imgContent = isImage
                 ? '<img src="' + img + '" alt="' + evento.name + '" class="slider-image" onclick="zoomImage(this, ' + eventoId + ', ' + index + ')" title="Clicca per ingrandire">'
@@ -154,7 +156,7 @@ function showEventoDetails(eventoId) {
 
         if (evento.images.length > 1) {
             sliderHTML += '<div class="slider-dots">';
-            evento.images.forEach(function(_, index) {
+            evento.images.forEach(function (_, index) {
                 sliderHTML += '<span class="slider-dot' + (index === 0 ? ' active' : '') + '" onclick="goToSlide(' + eventoId + ', ' + index + ')"></span>';
             });
             sliderHTML += '</div>';
@@ -166,7 +168,8 @@ function showEventoDetails(eventoId) {
     let descriptionHTML = evento.desc.replace(/\n/g, '<br>')
     modalBody.innerHTML = sliderHTML +
         '<p style="margin-bottom: 2rem; font-size: 1.2rem; line-height: 1.8; color: #333;">' + descriptionHTML + '</p>' +
-        '<button class="btn btn-primary" style="width: 100%; font-size: 1.2rem; padding: 1.2rem;" onclick="goToBooking()">📅 Prendi un Appuntamento</button>';
+        '<button class="btn btn-primary" style="width: 100%; margin-top: auto;" onclick="goToBooking()">📅 Fissa un appuntamento</button>';
+
     modal.classList.add("active");
 
     // Inizializza lo stato dello slider
@@ -326,9 +329,16 @@ function closeZoom() {
 // Rende la funzione accessibile globalmente
 window.closeZoom = closeZoom;
 
+// fallback se lo script Calendly non è caricato
 function goToBooking() {
-    window.open(bookingPageUrl, "_blank");
-    closeEventoModal();
+    if (window.Calendly && typeof Calendly.initPopupWidget === "function") {
+        // noinspection JSUnresolvedFunction
+        Calendly.initPopupWidget({ url: calendlyUrl });
+    } else {
+        // fallback: se per qualche motivo Calendly non è caricato
+        window.open(calendlyUrl, "_blank");
+    }
+    closeEventoModal(); // chiudo il modale degli eventi sotto il popup
 }
 
 // Rende la funzione accessibile globalmente
