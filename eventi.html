@@ -5,73 +5,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eventi - Mondofficina</title>
+
+    <!-- CSS generico del sito -->
     <link rel="stylesheet" href="css/stile.css">
+    <!-- CSS specifico per la pagina eventi -->
     <link rel="stylesheet" href="css/stile2.css">
+
+    <!-- Calendly -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+    <!-- JS pagina eventi -->
     <script defer src="java/eventi.js"></script>
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
     <link rel="shortcut icon" href="favicon/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
     <link rel="manifest" href="favicon/site.webmanifest" />
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 </head>
 
 <body>
-<header>
-    <nav>
+<header class="site-header">
+    <nav class="main-nav">
         <div class="logo">
             🔧 Mondofficina Automotive Solutions
         </div>
+
         <button class="menu-toggle" aria-label="Apri/chiudi menu di navigazione">☰</button>
+
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="index.html#categorie">Categorie</a></li>
             <li><a href="index.html#prodotti">Prodotti</a></li>
             <li><a href="index.html#contatti">Contatti</a></li>
             <li><a href="eventi.html" class="active">Prenota Eventi</a></li>
-            <li><a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Officine Autorizzate</a></li>
+            <li>
+                <a href="https://www.google.com/maps"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Officine Autorizzate
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
 
-<section class="eventi-hero">
-    <div class="eventi-hero-container">
-        <div class="eventi-hero-logo">
-            <div style="background: white; padding: 1rem 2rem; border-radius: 15px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.3);">
-                <img src="img/mondofficina.png" alt="Mondofficina logo" style="max-width: 250px; height: auto; display: block;">
+<main>
+    <!-- HERO -->
+    <section class="eventi-hero">
+        <div class="eventi-hero-container">
+            <div class="eventi-hero-logo">
+                <div class="eventi-hero-logo-inner">
+                    <img src="img/mondofficina.png"
+                         alt="Logo Mondofficina">
+                </div>
+            </div>
+
+            <div class="hero-content">
+                <h1>📅 Prenota i nostri eventi</h1>
+                <p>
+                    Workshop, fiere e corsi di formazione dedicati ai professionisti
+                    del settore automotive.
+                </p>
             </div>
         </div>
-        <div class="hero-content">
-            <h1>📅 Prenota i Nostri Eventi</h1>
-            <p>Scopri workshop, fiere e corsi di formazione dedicati ai professionisti del settore automotive</p>
-        </div>
-    </div>
-</section>
+    </section>
 
-<section class="eventi-section">
-    <div class="eventi-container">
-        <h2>Eventi in Programma</h2>
-        <div class="eventi-grid" id="eventiGrid">
-            <!-- Gli eventi verranno caricati qui dinamicamente -->
-        </div>
-    </div>
-</section>
+    <!-- FILTRI / CATEGORIE (opzionale ma già pronto per filterEventi) -->
+    <section class="eventi-categories">
+        <div class="eventi-categories-container">
+            <h2>Tipologia di evento</h2>
 
-<footer>
+            <div class="filter-bar">
+                <button class="filter-btn active"
+                        data-category="tutti"
+                        onclick="filterEventi('tutti')">
+                    Tutti
+                </button>
+                <button class="filter-btn"
+                        data-category="Formazione"
+                        onclick="filterEventi('Formazione')">
+                    Formazione
+                </button>
+                <button class="filter-btn"
+                        data-category="Demo"
+                        onclick="filterEventi('Dimostrazione')">
+                    Dimostrazione
+                </button>
+                <button class="filter-btn"
+                        data-category="Fiera"
+                        onclick="filterEventi('Agente')">
+                    Contatta un Agente
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ELENCO EVENTI -->
+    <section class="eventi-section" id="eventi">
+        <div class="eventi-container">
+            <h2>Eventi in programma</h2>
+
+            <div class="eventi-grid" id="eventiGrid">
+                <!-- Popolato dinamicamente da eventi.js -->
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
     <p>&copy; 2025 Mondofficina - Ricambi e Diagnostica per Professionisti</p>
     <p>P.IVA 08639001216 | Tutti i diritti riservati</p>
 </footer>
 
-<div id="eventoModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="eventoModalTitle">
+<!-- MODALE DETTAGLIO EVENTO -->
+<div id="eventoModal"
+     class="modal"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="eventoModalTitle"
+     aria-hidden="true">
     <div class="modal-content">
         <div class="modal-header">
             <h2 id="eventoModalTitle"></h2>
-            <button class="close-btn" type="button" aria-label="Chiudi finestra" onclick="closeEventoModal()">&times;</button>
+            <button class="close-btn"
+                    type="button"
+                    aria-label="Chiudi finestra"
+                    onclick="closeEventoModal()">
+                &times;
+            </button>
         </div>
-        <div id="eventoModalBody"></div>
+        <div id="eventoModalBody" class="modal-body">
+            <!-- Dettagli evento + slider + bottone Calendly -->
+        </div>
     </div>
 </div>
 
 </body>
 </html>
+
+

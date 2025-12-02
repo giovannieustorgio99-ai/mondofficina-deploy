@@ -1,10 +1,11 @@
-/* global Calendly*/
-/* exported Calendly */
+/* global Calendly */
+
 // CONFIGURAZIONE: Inserisci qui il tuo endpoint SheetDB per gli eventi
 let eventiDatabaseUrl = "https://sheetdb.io/api/v1/rjc3f8o3vryao";
 
-// CONFIGURAZIONE: Inserisci qui l'URL della pagina di prenotazione
-let calendlyUrl = "https://calendly.com/mondofficinainfo/furgone-milwakee";
+// CONFIGURAZIONE: URL Calendly di default (usato se l'evento non ne ha uno specifico)
+const defaultCalendlyUrl = "https://calendly.com/mondofficinainfo/furgone-milwakee";
+
 let eventi = [];
 let currentFilter = "tutti";
 
@@ -64,7 +65,9 @@ async function loadEventi() {
                 desc: row.desc,
                 img: images[0],
                 images: images,
-                category: row.category || "Formazione"
+                category: row.category || "Formazione",
+                // 👇 nuovo campo: URL Calendly specifico dell'evento (può essere vuoto)
+                calendlyUrl: row.calendlyUrl || ""
             };
         });
 
@@ -93,13 +96,19 @@ function renderEventi() {
     grid.innerHTML = filtered.map(evento => {
         let imgHTML = generateImageHtml(evento.img, evento.name, 'card');
 
-        return '<div class="evento-card" onclick="showEventoDetails(' + evento.id + ')">' +
-            '<div class="evento-image">' + imgHTML + '</div>' +
-            '<div class="evento-info">' +
-            '<h3>' + evento.name + '</h3>' +
-            '<p>' + evento.desc + '</p>' +
-            '<button class="btn btn-primary" style="width: 100%; margin-top: auto;">📅 Prendi un Apuntamento</button>' +
-            '</div>' +
+        return '' +
+            '<div class="evento-card" onclick="showEventoDetails(' + evento.id + ')">' +
+            '  <div class="evento-image">' + imgHTML + '</div>' +
+            '  <div class="evento-info">' +
+            '    <h3>' + evento.name + '</h3>' +
+            '    <p>' + evento.desc + '</p>' +
+            // 👇 bottone: usa l'ID dell’evento e non apre il modale
+            '    <button class="btn btn-primary" ' +
+            '            style="width: 100%; margin-top: auto;" ' +
+            '            onclick="event.stopPropagation(); goToBooking(' + evento.id + ')">' +
+            '        📅 Prendi un appuntamento' +
+            '    </button>' +
+            '  </div>' +
             '</div>';
     }).join("");
 }
@@ -165,10 +174,11 @@ function showEventoDetails(eventoId) {
     }
 
     // Converti gli a capo in <br>
-    let descriptionHTML = evento.desc.replace(/\n/g, '<br>')
+    let descriptionHTML = evento.desc.replace(/\n/g, '<br>');
     modalBody.innerHTML = sliderHTML +
         '<p style="margin-bottom: 2rem; font-size: 1.2rem; line-height: 1.8; color: #333;">' + descriptionHTML + '</p>' +
-        '<button class="btn btn-primary" style="width: 100%; margin-top: auto;" onclick="goToBooking()">📅 Fissa un appuntamento</button>';
+        // 👇 anche qui passiamo l’ID dell’evento a goToBooking
+        '<button class="btn btn-primary" style="width: 100%; font-size: 1.2rem; padding: 1.2rem;" onclick="goToBooking(' + evento.id + ')">📅 Fissa un appuntamento</button>';
 
     modal.classList.add("active");
 
@@ -210,7 +220,7 @@ function updateSliderDisplay(eventoId, activeIndex) {
     let slides = document.querySelectorAll('.slider-slide');
     let dots = document.querySelectorAll('.slider-dot');
 
-    slides.forEach(function(slide, index) {
+    slides.forEach(function (slide, index) {
         if (index === activeIndex) {
             slide.classList.add('active');
         } else {
@@ -218,7 +228,7 @@ function updateSliderDisplay(eventoId, activeIndex) {
         }
     });
 
-    dots.forEach(function(dot, index) {
+    dots.forEach(function (dot, index) {
         if (index === activeIndex) {
             dot.classList.add('active');
         } else {
@@ -250,7 +260,7 @@ function zoomImage(imgElement, eventoId, imageIndex) {
 
         document.body.appendChild(zoomOverlay);
 
-        zoomOverlay.addEventListener('click', function(e) {
+        zoomOverlay.addEventListener('click', function (e) {
             if (e.target === zoomOverlay) {
                 closeZoom();
             }
@@ -329,16 +339,29 @@ function closeZoom() {
 // Rende la funzione accessibile globalmente
 window.closeZoom = closeZoom;
 
-// fallback se lo script Calendly non è caricato
-function goToBooking() {
-    if (window.Calendly && typeof Calendly.initPopupWidget === "function") {
-        // noinspection JSUnresolvedFunction
-        Calendly.initPopupWidget({ url: calendlyUrl });
-    } else {
-        // fallback: se per qualche motivo Calendly non è caricato
-        window.open(calendlyUrl, "_blank");
+/**
+ * Apertura Calendly con supporto multi-calendario:
+ * - se l'evento ha row.calendlyUrl → usa quello
+ * - altrimenti usa defaultCalendlyUrl
+ */
+function goToBooking(eventoId) {
+    let url = defaultCalendlyUrl;
+
+    if (typeof eventoId !== "undefined" && eventoId !== null) {
+        let evento = eventi.find(e => e.id === Number(eventoId));
+        if (evento && evento.calendlyUrl) {
+            url = evento.calendlyUrl;
+        }
     }
-    closeEventoModal(); // chiudo il modale degli eventi sotto il popup
+
+    // se Calendly è caricato, uso il popup; altrimenti apro in nuova scheda
+    if (window.Calendly && typeof Calendly.initPopupWidget === "function") {
+        Calendly.initPopupWidget({ url: url });
+    } else {
+        window.open(url, "_blank");
+    }
+
+    closeEventoModal();
 }
 
 // Rende la funzione accessibile globalmente
@@ -410,7 +433,7 @@ function initModalHandlers() {
 }
 
 function init() {
-    loadEventi().catch(function(err) {
+    loadEventi().catch(function (err) {
         console.error("Errore inizializzazione:", err);
     });
     initMenuMobile();
